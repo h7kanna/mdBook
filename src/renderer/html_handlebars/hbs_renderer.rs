@@ -701,6 +701,11 @@ fn make_data(
         data.insert("additional_js".to_owned(), json!(js));
     }
 
+    // Add check to see if there is an additional script attributes
+    if let Some(attributes) = &html_config.additional_js_attributes {
+        data.insert("additional_js_attributes".to_owned(), json!(attributes));
+    }
+
     if html_config.playground.editable && html_config.playground.copy_js {
         data.insert("playground_js".to_owned(), json!(true));
         if html_config.playground.line_numbers {

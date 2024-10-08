@@ -320,7 +320,13 @@
 
         <!-- Custom JS scripts -->
         {{#each additional_js}}
-        <script src="{{ ../path_to_root }}{{this}}"></script>
+        <script src="{{ ../path_to_root }}{{this}}" {{~#with (lookup ../additional_js_attributes @index) as |attributes|~}}
+            {{#each attributes as |attribute| }}
+            	{{~#with attribute.type}} {{#if attribute.type~}}type="{{this}}"{{/if~}}{{/with~}}
+                {{~#with attribute.async}} {{#if attribute.async~}}async{{/if~}}{{/with~}}
+                {{~#with attribute.defer}} {{#if attribute.defer~}}defer{{/if~}}{{/with~}}
+            {{/each}}
+           {{~/with}}></script>
         {{/each}}
 
         {{#if is_print}}

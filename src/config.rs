@@ -518,6 +518,32 @@ pub enum RustEdition {
     E2015,
 }
 
+/// JavaScript tag type
+/// see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum JavaScriptType {
+    /// This value causes the code to be treated as a JavaScript module
+    Module,
+    /// This value indicates that the body of the element contains an import map.
+    Importmap,
+}
+
+/// JavaScript tag attributes
+/// see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#attributes
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum JavaScriptAttribute {
+    /// See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script/type
+    Type(JavaScriptType),
+    /// See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#async
+    Async(bool),
+    /// See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#defer
+    Defer(bool),
+    /// https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#nomodule
+    Nomodule(bool),
+}
+
 /// Configuration for the HTML renderer.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(default, rename_all = "kebab-case")]
@@ -544,6 +570,8 @@ pub struct HtmlConfig {
     /// Additional JS scripts to include at the bottom of the rendered page's
     /// `<body>`.
     pub additional_js: Vec<PathBuf>,
+    /// Attributes for the additional JS scripts
+    pub additional_js_attributes: Option<Vec<Vec<JavaScriptAttribute>>>,
     /// Fold settings.
     pub fold: Fold,
     /// Playground settings.
@@ -602,6 +630,7 @@ impl Default for HtmlConfig {
             google_analytics: None,
             additional_css: Vec::new(),
             additional_js: Vec::new(),
+            additional_js_attributes: None,
             fold: Fold::default(),
             playground: Playground::default(),
             code: Code::default(),
